@@ -2,6 +2,8 @@ const express = require('express');
 const http = require('http');
 const mongoose = require('mongoose');
 const { Server } = require('socket.io');
+const chatRoutes = require('./routes/chatRooms');
+
 
 const app = express();
 const server = http.createServer(app);
