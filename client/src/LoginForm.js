@@ -1,26 +1,42 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
 
-export default function LoginForm() {
-  const [username, setUsername] = useState('');
+function LoginForm() {
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
-  const handleLogin = async () => {
-    const res = await fetch('/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password })
-    });
-    const data = await res.json();
-    localStorage.setItem('token', data.token);
-    alert('Logged in!');
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post('http://localhost:5000/api/auth/login', { email, password });
+      console.log('Login successful:', res.data);
+    } catch (err) {
+      setError('Login failed');
+      console.error(err);
+    }
   };
 
   return (
-    <div>
+    <form onSubmit={handleSubmit}>
       <h2>Login</h2>
-      <input placeholder="Username" onChange={e => setUsername(e.target.value)} />
-      <input placeholder="Password" type="password" onChange={e => setPassword(e.target.value)} />
-      <button onClick={handleLogin}>Login</button>
-    </div>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+      <input
+        type="text"
+        placeholder="Email"
+        value={email}
+        onChange={e => setEmail(e.target.value)}
+      /><br />
+      <input
+        type="password"
+        placeholder="Password"
+        value={password}
+        onChange={e => setPassword(e.target.value)}
+      /><br />
+      <button type="submit">Login</button>
+    </form>
   );
 }
+
+export default LoginForm;
+

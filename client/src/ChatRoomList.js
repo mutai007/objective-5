@@ -4,7 +4,7 @@ export default function ChatRoomList({ onSelect }) {
   const [rooms, setRooms] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:5000/chat')
+    fetch('/chat')
       .then(res => res.json())
       .then(setRooms);
   }, []);
